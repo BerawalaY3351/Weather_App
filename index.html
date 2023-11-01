@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Current Weather</title>
+    <!--CSS-->
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 900;
+            font-size: 1.3em;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(0, 0, 0);
+        }
+
+        h1 {
+            margin: 0 auto;
+            font-size: 2.2em;
+            text-align: center;
+            color: #fff;
+            font-size: 8em;
+        }
+    </style>
+</head>
+
+<body>
+    <!--HTML-->
+    <div>
+        <div id="description"></div>
+        <h1 id="temp"></h1>
+        <div id="location"></div>
+    </div>
+    <!--Javascript-->
+    <script lang="text/javascript">
+        const getWeather = (cityName) => {
+            const fetchWeather = fetch(
+                'https://api.openweathermap.org/data/2.5/weather?q=' +
+                cityName +
+                '&appid=' +
+                'Your API_KEY' +
+                '&units=imperial'
+            );
+
+            fetchWeather
+                .then(function (resp) {
+                    return resp.json();
+                }) // convert data to json
+                .then(function (data) {
+                    displayWeather(data);
+                }) // call displayWeather
+                .catch(function () {
+                    // catch any errors
+                });
+        };
+        const displayWeather = (d) => {
+            let fahrenheit = Math.round(d.main.temp);
+            let description = d.weather[0].description;
+
+            document.getElementById('description').innerHTML=description;
+
+            document.getElementById('temp').innerHTML = fahrenheit + '&deg;';
+
+            document.getElementById('location').innerHTML = d.name;
+        }
+
+        window.onload = function(){
+            getWeather('Calgary, CA');
+        }
+    </script>
+</body>
